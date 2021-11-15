@@ -22,14 +22,17 @@
 	<div class="container"> 
 		<?php if (isset($validation)) { ?>
 			<div class="p-3 mb-2 bg-danger text-white"><?= $validation->listErrors(); ?></div>
-		<?php } ?>
-		<?php
-		// if ($_POST) {
+		<?php } 
+		if (isset($error)) { ?>
+			<div class="p-3 mb-2 bg-danger text-white"><?= $error; ?></div>
+		<?php } 
 			foreach ($people as $person) {
+				// retrieve person data from cache
 				$person_cache_name = str_replace(array( '{', '}',
 				'(' , ')', '/', '\'', '@', ':' ), '', $person->url);
 				$personal_data = cache()->get($person_cache_name);
 
+				// cache person data if it not found
 				if (!$personal_data = cache($person_cache_name)) {
 					$personal_data = json_decode($curl->request("get", $person->url, [
 						"headers" => [
@@ -50,10 +53,12 @@
 						<li class="list-group-item">Starships :
 							<ol>
 								<?php foreach ($personal_data->starships as $starship_url) {
+									// retrieve starship data from cache
 									$starship_cache_name = str_replace(array( '{', '}',
 									'(' , ')', '/', '\'', '@', ':' ), '', $starship_url);
 									$starship_data = cache()->get($starship_cache_name);
 
+									// cache starship data to file if it's not found
 									if (!$starship_data = cache($starship_cache_name)) {
 										$starship_data = json_decode($curl->request("get", $starship_url, [
 											"headers" => [
@@ -78,10 +83,12 @@
 						<li class="list-group-item">Vehicles :
 							<ol>
 								<?php foreach ($personal_data->vehicles as $vehicle_url) {
+									// retrieve vehicle data from file
 									$vehicle_cache_name = str_replace(array( '{', '}',
 									'(' , ')', '/', '\'', '@', ':' ), '', $starship_url);
 									$vehicle_data = cache()->get($vehicle_cache_name);
 
+									// cache vehicle data to file if it's not found
 									if (!$vehicle_data = cache($vehicle_cache_name)) {
 										$vehicle_data = json_decode($curl->request("get", $vehicle_url, [
 											"headers" => [
@@ -102,10 +109,13 @@
 						</li>
 						<li class="list-group-item">Homeworld :
 									<?php 
+
+									// retrieve homeworld data from cache
 									$homeworld_cache_name = str_replace(array( '{', '}',
 									'(' , ')', '/', '\'', '@', ':' ), '', $person->homeworld);
 									$homeworld_data = cache()->get($homeworld_cache_name);
 
+									// cache homeworld data if it;s not cached yet
 									if (!$homeworld_data = cache($homeworld_cache_name)) {
 										$homeworld_data = json_decode($curl->request("get", $person->homeworld, [
 											"headers" => [
@@ -124,8 +134,7 @@
 					</p>
 				</div>
 			</div>
-			<?php } 
-		// } ?>
+			<?php } ?>
 	</div>
 
     <!-- Optional JavaScript; choose one of the two! -->
