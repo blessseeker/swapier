@@ -34,14 +34,15 @@ class Home extends BaseController
 					])->getBody())->results;
 					cache()->save($person_name, $people, 604800);
 				}
+				// handle not found error
+				if (count($people) < 1) {
+					$data['error'] = 'Person Not Found';
+				}
 			}
 		}
 
 	
 		// send retrieved data to view
-		if (count($people) < 1) {
-			$data['error'] = 'Person Not Found';
-		}
 		$data['people'] = $people;
 
 		return view('home', $data);
