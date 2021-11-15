@@ -14,12 +14,15 @@
   <nav class="navbar navbar-light bg-light">
 	<div class="container-fluid">
 		<form class="d-flex" method="post">
-		<input class="form-control me-2" name="person_name" type="search" placeholder="Type a Person Name" aria-label="Search">
+		<input class="form-control me-2" name="person_name" type="search" placeholder="Type a Person Name" aria-label="Search" required>
 		<button class="btn btn-outline-success" type="submit">Search</button>
 		</form>
 	</div>
 	</nav>
-	<div class="container">
+	<div class="container"> 
+		<?php if (isset($validation)) { ?>
+			<div class="p-3 mb-2 bg-danger text-white"><?= $validation->listErrors(); ?></div>
+		<?php } ?>
 		<?php
 		// if ($_POST) {
 			foreach ($people as $person) {
